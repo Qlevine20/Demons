@@ -6,6 +6,8 @@ public class MapGenerator : MonoBehaviour {
 
 	public int width;
 	public int height;
+	public Transform[] blocks;
+	public Transform[] backg;
 	public string seedname;
 	//name of seed so it can be re-used
 	public bool UseRandomSeed;
@@ -27,6 +29,7 @@ public class MapGenerator : MonoBehaviour {
 	void MapGenerate(){
 		map = new int[width, height];
 		RandomFillMap ();
+		OnDrawBlocks ();
 
 	}
 
@@ -42,22 +45,41 @@ public class MapGenerator : MonoBehaviour {
 
 			for (int x = 0; x<width;x++){
 				for (int y = 0; y<height;y++){
-					map[x,y] = (psuedoRandom.Next(0,100) < RandFillPercent)?1:0; 
-					//this line basically says that if the Random Number is less 
-					//than the RandFillPercent then put a 1 (block) there.  Otherwise 
-					//place a 0 (empty).
+					if (x>0 && y>0 && x<width-1 && y<height-1){
+						if (map[x+1,y+1]==1 || map[x+1,y] == 1||map[x,y+1] ==1 || map[x-1,y-1] == 1 || map[x-1,y] == 1||map[x,y-1] == 1)
+						{
+						map[x,y] = (psuedoRandom.Next(0,100) < RandFillPercent/1.5)?1:0; 
+						}
+						else
+						{
+							map[x,y] = (psuedoRandom.Next(0,100) < RandFillPercent)?1:0;
+							//this line basically says that if the Random Number is less 
+							//than the RandFillPercent then put a 1 (block) there.  Otherwise 
+							//place a 0 (empty).
+						}
+					}
+					else
+					{
+						map[x,y] = 1;
+					}
 				}
 			}
 		}
 	}
 
-	void OnDrawGizmos(){
+	void OnDrawBlocks(){
 		if (map != null) {
 			for (int x = 0; x<width;x++){
 				for (int y = 0; y<height;y++){
-					Gizmos.color = (map[x,y] == 1)?Color.black:Color.white;
-					Vector3 cen = new Vector3(-width/2 + x + .5f, -height/2 + y + .5f);
-					Gizmos.DrawCube (cen,Vector3.one);
+					if (map[x,y]== 1){
+						Transform thisblock = blocks[UnityEngine.Random.Range (0,blocks.Length)];
+						Instantiate (thisblock,new Vector2(x,y),Quaternion.identity);
+					}
+					else
+					{
+						Transform thisbackg = backg[UnityEngine.Random.Range (0,backg.Length)];
+						Instantiate (thisbackg,new Vector2(x,y),Quaternion.identity);
+					}
 				}
 			}
 		}
