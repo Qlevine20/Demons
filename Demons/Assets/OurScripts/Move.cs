@@ -2,11 +2,10 @@
 using System.Collections;
 
 public class Move : MonoBehaviour {
+
+	private bool begin;
 	// Use this for initialization
 	public float movespeed;
-	void Start () {
-	
-	}
 	
 	// Update is called once per frame
 	void Update () {

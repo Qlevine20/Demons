@@ -9,15 +9,17 @@ public class MapGenerator : MonoBehaviour {
 	public int height;
 
 	public GameObject player;
+	private GameObject playerc;
 
 
 	public GameObject exit;
+	private GameObject exitc;
 
 
 	public Transform[] blocks;
 	//list of block types
 	public Transform[] backg;
-	//list of bacground block types
+	//list of bacground block stypes
 	public string seedname;
 	//name of seed so it can be re-used
 	public bool UseRandomSeed;
@@ -38,10 +40,17 @@ public class MapGenerator : MonoBehaviour {
 	void Start () {
 		MapGenerate ();
 		//Given the width and height make the actual map
+
 	}
 	void MapGenerate(){
 		map = new int[width, height];
+		int playerpx = UnityEngine.Random.Range (2, width-2);
+		int playerpy = UnityEngine.Random.Range (2, height-2);
+		playerc = Instantiate (player,new Vector2 (playerpx, playerpy), Quaternion.identity) as GameObject;
 		RandomFillMap ();
+		int exitpx = UnityEngine.Random.Range (2, width-2);
+		int exitpy = UnityEngine.Random.Range (2, height-2);
+		exitc = Instantiate (exit,new Vector2 (exitpx, exitpy), Quaternion.identity) as GameObject;
 		GeneratePath ();
 		OnDrawBlocks ();
 
@@ -61,17 +70,19 @@ public class MapGenerator : MonoBehaviour {
 
 		for (int x = 0; x<width;x++){
 			for (int y = 0; y<height;y++){
-				if (x>0 && y>0 && x<width-1 && y<height-1 && !player.GetComponent<CircleCollider2D>().OverlapPoint(new Vector2(x,y))){
-					if (map[x+1,y+1]==1 || map[x+1,y] == 1||map[x,y+1] ==1 || map[x-1,y-1] == 1 || map[x-1,y] == 1||map[x,y-1] == 1)
-					{
-					map[x,y] = (psuedoRandom.Next(0,100) < RandFillPercent)?1:0; 
-					}
-					else
-					{
-						map[x,y] = (psuedoRandom.Next(0,100) < RandFillPercent)?1:0;
-						//this line basically says that if the Random Number is less 
-						//than the RandFillPercent then put a 1 (block) there.  Otherwise 
-						//place a 0 (empty).
+				if (x>0 && y>0 && x<width-1 && y<height-1 ){
+					if(!playerc.GetComponent<BoxCollider2D>().OverlapPoint(new Vector2(x,y))){
+						if (map[x+1,y+1]==1 || map[x+1,y] == 1||map[x,y+1] ==1 || map[x-1,y-1] == 1 || map[x-1,y] == 1||map[x,y-1] == 1)
+						{
+						map[x,y] = (psuedoRandom.Next(0,100) < RandFillPercent)?1:0; 
+						}
+						else
+						{
+							map[x,y] = (psuedoRandom.Next(0,100) < RandFillPercent)?1:0;
+							//this line basically says that if the Random Number is less 
+							//than the RandFillPercent then put a 1 (block) there.  Otherwise 
+							//place a 0 (empty).
+						}
 					}
 				}
 				else
@@ -111,13 +122,15 @@ public class MapGenerator : MonoBehaviour {
 
 
 	void GeneratePath(){
-		int playerx = (int)(Math.Round(player.transform.position.x));
-		int playery = (int)(Math.Round(player.transform.position.y));
-		int exitx = (int)(Math.Round(exit.transform.position.x));
-		int exity = (int)(Math.Round(exit.transform.position.y));
+		int playerx = (int)(Math.Round(playerc.transform.position.x));
+		int playery = (int)(Math.Round(playerc.transform.position.y));
+		int exitx = (int)(Math.Round(exitc.transform.position.x));
+		int exity = (int)(Math.Round(exitc.transform.position.y));
 
 
 		while(true){
+			break;
+			//Using up too much power to create the path with this while loop so I'm putting in a break for now.  Need to make this more efficient.
 			int randx = 0;
 			int randy = 0;
 			if (exitx>=playerx){
@@ -156,13 +169,11 @@ public class MapGenerator : MonoBehaviour {
 				playerx = xchoice;
 				playery = ychoice;
 
-
-
-				if(playerx == exitx && playery == exity){
-					break;
-				}
-
 			}
+			if(playerx == exitx && playery == exity){
+				break;
+			}
+			
 		}
 	}
 }
