@@ -126,21 +126,18 @@ public class MapGenerator : MonoBehaviour {
 		int playery = (int)(Math.Round(playerc.transform.position.y));
 		int exitx = (int)(Math.Round(exitc.transform.position.x));
 		int exity = (int)(Math.Round(exitc.transform.position.y));
+		int randx = 0;
+		int randy = 0;
 
 
 		while(true){
-			break;
-			//Using up too much power to create the path with this while loop so I'm putting in a break for now.  Need to make this more efficient.
-			int randx = 0;
-			int randy = 0;
 			if (exitx>=playerx){
-				if (UnityEngine.Random.Range(1,100)<RandFillPercent){
-					randx = UnityEngine.Random.Range(0,2);
-				}
-				else{
-					randx = (UnityEngine.Random.Range (-1,1));
-				}
+				randx = UnityEngine.Random.Range(0,2);
 			}
+			else{
+				randx = (UnityEngine.Random.Range (-1,1));
+				}
+			
 			if (randx == 0){
 				if (exity>=playery){
 				randy = 1;
