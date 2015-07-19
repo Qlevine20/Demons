@@ -7,14 +7,22 @@ public class MapGenerator : MonoBehaviour {
 
 	public int width;
 	public int height;
+	private int EnemyCount;
 
 	public GameObject player;
 	private GameObject playerc;
+
+	private int playerx;
+	private int playery;
 
 
 	public GameObject exit;
 	private GameObject exitc;
 
+	public GameObject HopperObj;
+
+	[Range(0,100)]
+	public float EnemyPercent;
 
 	public Transform[] blocks;
 	//list of block types
@@ -53,6 +61,8 @@ public class MapGenerator : MonoBehaviour {
 		exitc = Instantiate (exit,new Vector2 (exitpx, exitpy), Quaternion.identity) as GameObject;
 		GeneratePath ();
 		OnDrawBlocks ();
+		EnemyCount = CountHopperSpots ();
+		GenerateEnemies ();
 
 
 	}
@@ -122,8 +132,8 @@ public class MapGenerator : MonoBehaviour {
 
 
 	void GeneratePath(){
-		int playerx = (int)(Math.Round(playerc.transform.position.x));
-		int playery = (int)(Math.Round(playerc.transform.position.y));
+		playerx = (int)(Math.Round(playerc.transform.position.x));
+		playery = (int)(Math.Round(playerc.transform.position.y));
 		int exitx = (int)(Math.Round(exitc.transform.position.x));
 		int exity = (int)(Math.Round(exitc.transform.position.y));
 		int randx = 0;
@@ -171,6 +181,54 @@ public class MapGenerator : MonoBehaviour {
 				break;
 			}
 			
+		}
+	}
+
+
+	int CountHopperSpots(){
+		int HopperSpots = 0;
+		for (int x = 0; x<width; x++) {
+			for (int y = 0; y<height; y++) {
+				if(x>0 && y>0 && x<width-1 && y<height-1){
+					if((map[x,y])+(map[x,y-1])+(map[x,y+1])==0){
+						HopperSpots+=1;
+						map[x,y-2]=1;
+						map[x,y+2]=1;
+					}
+				}
+			}
+		}
+		return HopperSpots;
+	}
+
+
+
+
+	void GenerateEnemies(){
+		int enemies = 0;
+		int newx = 0;
+		int newy = 0;
+		bool doublebreak = false;
+		while(enemies<EnemyCount*(EnemyPercent/100)) {
+			newx = (UnityEngine.Random.Range (0,width-1));
+			newy = (UnityEngine.Random.Range (0,height-1));
+			for (int x = newx; x<width;x++){
+				if(doublebreak){
+					doublebreak = false;
+					break;
+				}
+				for (int y = newy; y<height;y++){
+					if(x>0 && y>0 && x<width-1 && y<height-1&&x!=playerx&&y!=playery){
+						if ((map[x,y])+(map[x,y-1])+(map[x,y+1])==0){
+							Instantiate (HopperObj,new Vector2(x,y),Quaternion.identity);
+							enemies+=1;
+							doublebreak = true;
+							break;
+
+						}
+					}
+				}
+			}
 		}
 	}
 }
