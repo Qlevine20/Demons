@@ -6,17 +6,30 @@ public class Move : MonoBehaviour {
 	private bool begin;
 	// Use this for initialization
 	public float movespeed;
+	private Transform tr;
+	private ParticleSystem jetpack;
+
+	void Start(){
+		tr = GetComponent<Transform> ();
+		jetpack = GetComponent<ParticleSystem> ();
+		jetpack.enableEmission = false;
+	}
 	
 	// Update is called once per frame
 	void Update () {
-		if (Input.GetKey (KeyCode.UpArrow)) {
-			transform.position = new Vector2(transform.position.x,transform.position.y+movespeed);
+		if(Input.GetKey (KeyCode.UpArrow)) {
+			tr.Translate((Vector3.up)/7f);
+			jetpack.enableEmission = true;
+		}
+
+		if (Input.GetKeyUp (KeyCode.UpArrow)) {
+			jetpack.enableEmission = false;
 		}
 		if (Input.GetKey (KeyCode.LeftArrow)) {
-			transform.position = new Vector2(transform.position.x-movespeed,transform.position.y);
+			tr.Translate((Vector3.left)/20f);
 		}
 		if (Input.GetKey (KeyCode.RightArrow)) {
-			transform.position = new Vector2(transform.position.x+movespeed,transform.position.y);
+			tr.Translate((Vector3.right)/20f);
 		}
 	}
 
