@@ -12,6 +12,7 @@ public class Move : MonoBehaviour {
 	public static float maxfuel;
 	public static float fuelevel;
 	private bool fuelon;
+	public static bool facingleft;
 
 	void Start(){
 		rb = GetComponent<Rigidbody2D> ();
@@ -20,6 +21,7 @@ public class Move : MonoBehaviour {
 		jetpack.enableEmission = false;
 		maxfuel = 3;
 		fuelevel = maxfuel;
+		facingleft = true;
 	}
 	
 	// Update is called once per frame
@@ -45,9 +47,15 @@ public class Move : MonoBehaviour {
 		}
 		if (Input.GetKey (KeyCode.LeftArrow)) {
 			tr.Translate((Vector3.left)/20f);
+			if (facingleft){
+				Flip();
+			}
 		}
 		if (Input.GetKey (KeyCode.RightArrow)) {
 			tr.Translate((Vector3.right)/20f);
+			if (!facingleft){
+				Flip();
+			}
 		}
 	}
 
@@ -61,8 +69,22 @@ public class Move : MonoBehaviour {
 		if (coll.gameObject.tag == "Block") {
 			if (fuelevel < maxfuel) {
 				fuelevel += 1 * Time.deltaTime;
-				print (fuelevel/maxfuel);
 			}
 		}
+	}
+
+
+
+	void Flip(){
+		Vector3 flipScale;
+
+		Rigidbody2D rigidbody = GetComponent<Rigidbody2D> ();
+		flipScale = rigidbody.transform.localScale;
+		flipScale.x *= -1;
+
+		rigidbody.transform.localScale = flipScale ;
+
+		facingleft = !facingleft;
+
 	}
 }
