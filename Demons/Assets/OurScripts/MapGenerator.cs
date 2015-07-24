@@ -6,35 +6,50 @@ using System.Linq;
 public class MapGenerator : MonoBehaviour {
 
 	public int width;
+	//width of room
+
 	public int height;
-	private int EnemyCount;
+	//height of room
+
+	private int MaxEnemyCount;
+	//number of possible enemies in the room
 
 	public GameObject player;
+
 	private GameObject playerc;
+	//player clone
 
 	private int playerx;
+	//x-coordinate of player
+
 	private int playery;
+	//y-coordinate of player
 
 
 	public GameObject exit;
+
 	private GameObject exitc;
+	//exit clone
 
 	public GameObject HopperObj;
+	//Hopper Enemy
 
 	[Range(0,100)]
 	public float EnemyPercent;
+	//number of enemies to put in room/
+	//number of spaces available for the enemy
 
 	public Transform[] blocks;
 	//list of block types
+
 	public Transform[] backg;
 	//list of bacground block stypes
+
 	public string seedname;
 	//name of seed so it can be re-used
+
 	public bool UseRandomSeed;
 	//Randomly creates new seed
-
-	private bool xfine;
-	private bool yfine;
 
 	[Range(0,100)]
 	//Used to set a range
@@ -51,17 +66,34 @@ public class MapGenerator : MonoBehaviour {
 
 	}
 	void MapGenerate(){
+		//Create just the bare map
 		map = new int[width, height];
+
+		//Set the coordinates for the player
 		int playerpx = UnityEngine.Random.Range (2, width-2);
 		int playerpy = UnityEngine.Random.Range (2, height-2);
+
+		//Put the player clone at those coordinates
 		playerc = Instantiate (player,new Vector2 (playerpx, playerpy), Quaternion.identity) as GameObject;
+
+		//Fill the map with blocks
 		RandomFillMap ();
+
+		//Set the coordinates for the exit
 		int exitpx = UnityEngine.Random.Range (2, width-2);
 		int exitpy = UnityEngine.Random.Range (2, height-2);
+
+		//Put the exit clone at those coordinates
 		exitc = Instantiate (exit,new Vector2 (exitpx, exitpy), Quaternion.identity) as GameObject;
+
+
 		GeneratePath ();
+
 		OnDrawBlocks ();
-		EnemyCount = CountHopperSpots ();
+
+		//Sets the max number of enemies equal to the max number of spots available.
+		MaxEnemyCount = CountHopperSpots ();
+
 		GenerateEnemies ();
 
 
@@ -101,14 +133,10 @@ public class MapGenerator : MonoBehaviour {
 				}
 			}
 		}
-
-		//We need to randomly generate a path from the players start location to wherever the
-		//finish area is and then delete and blocks on that path in order to make sure that
-		//the player can not get stuck on one of the randomly generated maps.  There has to 
-		//be a way out.
-
 	}
 
+	//Creates the block clones at the positions that the map generator produced a 1.
+	//Places a background block everywhere.
 	void OnDrawBlocks(){
 		if (map != null) {
 			for (int x = 0; x<width;x++){
@@ -130,7 +158,10 @@ public class MapGenerator : MonoBehaviour {
 	}
 
 
-
+	//Creates a path from the player to the exit
+	//Basically checks to see if exit is above or below the player and if the exit is 
+	//to the left or to the right of the player.  It then randomly builds a path 
+	//with that knowledge
 	void GeneratePath(){
 		playerx = (int)(Math.Round(playerc.transform.position.x));
 		playery = (int)(Math.Round(playerc.transform.position.y));
@@ -184,7 +215,7 @@ public class MapGenerator : MonoBehaviour {
 		}
 	}
 
-
+	//Counts the number of possible Hopper locations
 	int CountHopperSpots(){
 		int HopperSpots = 0;
 		for (int x = 0; x<width; x++) {
@@ -203,13 +234,14 @@ public class MapGenerator : MonoBehaviour {
 
 
 
-
+	//Randomly Places enemies throughout the map such they are for the most
+	//part spread out
 	void GenerateEnemies(){
 		int enemies = 0;
 		int newx = 0;
 		int newy = 0;
 		bool doublebreak = false;
-		while(enemies<EnemyCount*(EnemyPercent/100)) {
+		while(enemies<MaxEnemyCount*(EnemyPercent/100)) {
 			newx = (UnityEngine.Random.Range (0,width-1));
 			newy = (UnityEngine.Random.Range (0,height-1));
 			for (int x = newx; x<width;x++){

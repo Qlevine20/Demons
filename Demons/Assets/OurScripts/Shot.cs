@@ -15,12 +15,17 @@ public class Shot : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
+
+
 		if (collided) {
 			if(Psystem.isStopped){
+				//After collision and particle effect destroy self
 				Destroy (gameObject);
 			}
 		}
 	}
+
+	//Only play the particle system after the first collision
 	void OnCollisionEnter2D(Collision2D coll){
 		if (coll.gameObject.tag != "Player" && coll.gameObject.tag != "Weapon" && !collided) {
 			print (coll.gameObject.name);
