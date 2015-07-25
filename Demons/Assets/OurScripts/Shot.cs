@@ -28,7 +28,6 @@ public class Shot : MonoBehaviour {
 	//Only play the particle system after the first collision
 	void OnCollisionEnter2D(Collision2D coll){
 		if (coll.gameObject.tag != "Player" && coll.gameObject.tag != "Weapon" && !collided) {
-			print (coll.gameObject.name);
 			Psystem.Play ();
 			collided = true;
 			if (coll.gameObject.tag == "Hopper") {

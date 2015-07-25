@@ -44,6 +44,7 @@ public class Move : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
+		Physics2D.IgnoreLayerCollision(10,9);
 
 		//Up
 		if(Input.GetKey (KeyCode.UpArrow)) {
