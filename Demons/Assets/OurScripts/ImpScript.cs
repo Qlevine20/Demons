@@ -10,30 +10,44 @@ public class ImpScript : MonoBehaviour {
 	private Transform imptr;
 	private bool impfacingright;
 	public GameObject ImpSpike;
-
+	private float count;
+	public int TimeToDie;
 	// Use this for initialization
 	void Awake () {
+		count = 0;
 		imptr = this.transform;
 		impfacingright = (Move.facingright) ? true : false;
+		if (impfacingright) {
+			Flip ();
+		}
 	}
 	
 	// Update is called once per frame
 	void Update () {
+		count += Time.deltaTime;
+
+		Physics2D.IgnoreLayerCollision(9,9);
+
+		if (count >= TimeToDie) {
+			Destroy (this.gameObject);
+		}
+
 		if (impfacingright) {
 			imptr.Translate ((Vector3.right)*movespeed / 30f);
 		} else {
-			imptr.Translate ((Vector3.left)* movespeed / 30f);
+			imptr.Translate ((Vector3.right)* -movespeed / 30f);
 		}
 	}
 
-	void OnCollisionEnter2D(Collision2D coll){
-		if (coll.transform.position.y >= Math.Round (this.transform.position.y)){
-			if(coll.gameObject.tag == "Block"){
-				Flip ();
-			}
+	void OnTriggerEnter2D(Collider2D coll){
+		if (coll.gameObject.tag == "BlockSide"){
+			Flip ();
+			impfacingright = !impfacingright;
 		}
+	}
+	
 
-
+	void OnCollisionEnter2D(Collision2D coll){
 		if (coll.gameObject.tag == "Spike") {
 			Instantiate (ImpSpike,new Vector2 (coll.transform.position.x, coll.transform.position.y), Quaternion.identity);
 			Destroy (coll.gameObject);
@@ -50,8 +64,6 @@ public class ImpScript : MonoBehaviour {
 		flipScale.x *= -1;
 		
 		rigidbody.transform.localScale = flipScale ;
-		
-		impfacingright = !impfacingright;
 		
 	}
 }

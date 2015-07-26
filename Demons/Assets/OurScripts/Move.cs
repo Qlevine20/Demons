@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System;
 
 public class Move : MonoBehaviour {
 
@@ -29,7 +30,17 @@ public class Move : MonoBehaviour {
 	public static bool facingright;
 	//Checks to see if the player is facing right.
 
+	public Transform altar;
+
+	public float altarRange;
+
+	public bool altarInRange;
+
+	public GameObject Imp;
+
+	public int ImpAllow;
 	void Start(){
+		altarInRange = false;
 		//Initialize each variable.
 		rb = GetComponent<Rigidbody2D> ();
 		tr = GetComponent<Transform> ();
@@ -41,10 +52,14 @@ public class Move : MonoBehaviour {
 		fuelevel = maxfuel;
 		facingright = true;
 	}
+
+
 	
 	// Update is called once per frame
 	void Update () {
+
 		Physics2D.IgnoreLayerCollision(10,9);
+
 
 		//Up
 		if(Input.GetKey (KeyCode.UpArrow)) {
@@ -91,7 +106,41 @@ public class Move : MonoBehaviour {
 				Flip();
 			}
 		}
+
+		
+		if (altarInRange) {
+			GameObject[] ImpList = GameObject.FindGameObjectsWithTag("Imp");
+			if(ImpList.Length<ImpAllow){
+				if(Input.GetKeyDown (KeyCode.X)){
+					Instantiate (Imp,new Vector2 (tr.position.x, tr.position.y), Quaternion.identity);
+				}
+			}
+		}
 	}
+
+
+
+	
+	void OnTriggerEnter2D(Collider2D coll){
+		if (coll.gameObject.tag == "Altar") {
+			altarInRange = true;
+		}
+	}
+	
+	void OnTriggerStay2D(Collider2D coll){
+		if (coll.gameObject.tag == "Altar") {
+			altarInRange = true;
+		}
+	}
+	
+	void OnTriggerExit2D(Collider2D coll){
+		if (coll.gameObject.tag == "Altar") {
+			altarInRange = false;
+		}
+	}
+
+
+
 
 	//One touch collision with object.
 	void OnCollisionEnter2D(Collision2D coll){
