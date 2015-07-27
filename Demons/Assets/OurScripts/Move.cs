@@ -146,7 +146,11 @@ public class Move : MonoBehaviour {
 	void OnCollisionEnter2D(Collision2D coll){
 		if (coll.gameObject.tag == "Exit") {
 			print ("You win");
-		}	
+		}
+
+		if (coll.gameObject.tag == "Button") {
+			Destroy(coll.gameObject.GetComponentInParent<GameObject>());
+		}
 	}
 
 

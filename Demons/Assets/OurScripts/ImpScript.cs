@@ -44,6 +44,8 @@ public class ImpScript : MonoBehaviour {
 			Flip ();
 			impfacingright = !impfacingright;
 		}
+
+
 	}
 	
 
@@ -52,6 +54,11 @@ public class ImpScript : MonoBehaviour {
 			Instantiate (ImpSpike,new Vector2 (coll.transform.position.x, coll.transform.position.y), Quaternion.identity);
 			Destroy (coll.gameObject);
 			Destroy (this.gameObject);
+		}
+
+
+		if (coll.gameObject.tag == "Button") {
+			Destroy(coll.transform.parent.gameObject);
 		}
 	}
 
