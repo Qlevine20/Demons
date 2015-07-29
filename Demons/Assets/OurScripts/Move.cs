@@ -30,18 +30,26 @@ public class Move : MonoBehaviour {
 	public static bool facingright;
 	//Checks to see if the player is facing right.
 
-	public Transform altar;
+	public Transform AltarRange;
 
-	public float altarRange;
 
-	public bool altarInRange;
+	private float AltarRangeScale;
+
+	public bool AltarInRange;
 
 	public GameObject Imp;
 
 	public int ImpAllow;
 	void Start(){
-		altarInRange = false;
+		AltarInRange = false;
 		//Initialize each variable.
+
+		AltarRangeScale = 5;
+
+		AltarRange.localScale = new Vector3(1,1,1);
+		
+		AltarRange.localScale *= AltarRangeScale;
+
 		rb = GetComponent<Rigidbody2D> ();
 		tr = GetComponent<Transform> ();
 		jetpack = GetComponent<ParticleSystem> ();
@@ -108,7 +116,7 @@ public class Move : MonoBehaviour {
 		}
 
 		
-		if (altarInRange) {
+		if (AltarInRange) {
 			GameObject[] ImpList = GameObject.FindGameObjectsWithTag("Imp");
 			if(ImpList.Length<ImpAllow){
 				if(Input.GetKeyDown (KeyCode.X)){
@@ -122,20 +130,20 @@ public class Move : MonoBehaviour {
 
 	
 	void OnTriggerEnter2D(Collider2D coll){
-		if (coll.gameObject.tag == "Altar") {
-			altarInRange = true;
+		if (coll.gameObject.tag == "AltarRange") {
+			AltarInRange = true;
 		}
 	}
 	
 	void OnTriggerStay2D(Collider2D coll){
-		if (coll.gameObject.tag == "Altar") {
-			altarInRange = true;
+		if (coll.gameObject.tag == "AltarRange") {
+			AltarInRange = true;
 		}
 	}
 	
 	void OnTriggerExit2D(Collider2D coll){
-		if (coll.gameObject.tag == "Altar") {
-			altarInRange = false;
+		if (coll.gameObject.tag == "AltarRange") {
+			AltarInRange = false;
 		}
 	}
 
