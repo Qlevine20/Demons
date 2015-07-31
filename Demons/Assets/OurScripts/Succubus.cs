@@ -1,67 +1,67 @@
 ﻿using UnityEngine;
 using System.Collections;
-using System;
 
-public class ImpScript : MonoBehaviour {
+public class Succubus : MonoBehaviour {
 
 
-	public int health;
-	public int movespeed;
-	private Transform imptr;
+	public int Health;
+	public int Movespeed;
+	private Transform Succtr;
 	private bool SuccFacingright;
 	public GameObject ImpSpike;
-	private float count;
+	private float Count;
 	public int TimeToDie;
+	public int LureRange;
+
 	// Use this for initialization
 	void Awake () {
-		count = 0;
-		imptr = this.transform;
+		Count = 0;
+		Succtr = this.transform;
 		SuccFacingright = (Move.facingright) ? true : false;
-		if (SuccFacingright) {
+		if (!SuccFacingright) {
 			Flip ();
 		}
+	
 	}
 	
 	// Update is called once per frame
 	void Update () {
-		count += Time.deltaTime;
-
+		Count += Time.deltaTime;
+		
 		Physics2D.IgnoreLayerCollision(9,9);
 
-		if (count >= TimeToDie) {
+		if (Count >= TimeToDie) {
 			Destroy (this.gameObject);
 		}
-
+		
 		if (SuccFacingright) {
-			imptr.Translate ((Vector3.right)*movespeed / 30f);
+			Succtr.Translate ((Vector3.right)*Movespeed / 30f);
 		} else {
-			imptr.Translate ((Vector3.right)* -movespeed / 30f);
+			Succtr.Translate ((Vector3.right)* -Movespeed / 30f);
 		}
 	}
 
+
+
 	void OnTriggerEnter2D(Collider2D coll){
-		if (coll.gameObject.tag == "BlockSide"){
+		if (coll.gameObject.tag == "BlockSide") {
 			Flip ();
 			SuccFacingright = !SuccFacingright;
 		}
 
-
+		if (coll.gameObject.tag == "SpikeSide") {
+			Flip ();
+			SuccFacingright = !SuccFacingright;
+		
+		}
 	}
 	
-
+	
 	void OnCollisionEnter2D(Collision2D coll){
 		if (coll.gameObject.tag == "Spike") {
-			Instantiate (ImpSpike,new Vector2 (coll.transform.position.x, coll.transform.position.y), Quaternion.identity);
-			Destroy (coll.gameObject);
 			Destroy (this.gameObject);
 		}
-
-
-		if (coll.gameObject.tag == "Button") {
-			Destroy(coll.transform.parent.gameObject);
-		}
 	}
-
 
 	void Flip(){
 		Vector3 flipScale;

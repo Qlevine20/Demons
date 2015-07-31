@@ -33,22 +33,28 @@ public class Move : MonoBehaviour {
 	public Transform AltarRange;
 
 
-	private float AltarRangeScale;
+	private float AltarRangeScriptScale;
 
-	public bool AltarInRange;
 
 	public GameObject Imp;
+	public GameObject Succubus;
 
 	public int ImpAllow;
+	public int SuccAllow;
+
+	private bool ImpAltarInRange;
+	private bool SuccAltarInRange;
 	void Start(){
-		AltarInRange = false;
+
+		ImpAltarInRange = false;
+		SuccAltarInRange = false;
 		//Initialize each variable.
 
-		AltarRangeScale = 5;
+		AltarRangeScriptScale = 5;
 
 		AltarRange.localScale = new Vector3(1,1,1);
 		
-		AltarRange.localScale *= AltarRangeScale;
+		AltarRange.localScale *= AltarRangeScriptScale;
 
 		rb = GetComponent<Rigidbody2D> ();
 		tr = GetComponent<Transform> ();
@@ -66,19 +72,18 @@ public class Move : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 
-		Physics2D.IgnoreLayerCollision(10,9);
+		Physics2D.IgnoreLayerCollision (10, 9);
 
 
 		//Up
-		if(Input.GetKey (KeyCode.UpArrow)) {
+		if (Input.GetKey (KeyCode.UpArrow)) {
 			if (fuelevel > 0) {
 				//Use jetpack.
 				rb.AddForce (new Vector2 (0, movespeed));
 				fuelon = true;
 				fuelevel -= 1 * Time.deltaTime;
 				jetpack.enableEmission = true;
-			} 
-			else {
+			} else {
 				//If there is no fuel jetpack will not work.
 				jetpack.enableEmission = false;
 			}
@@ -101,26 +106,35 @@ public class Move : MonoBehaviour {
 
 		//Left
 		if (Input.GetKey (KeyCode.LeftArrow)) {
-			tr.Translate((Vector3.left)/20f);
-			if (facingright){
-				Flip();
+			tr.Translate ((Vector3.left) / 20f);
+			if (facingright) {
+				Flip ();
 			}
 		}
 
 		//Right
 		if (Input.GetKey (KeyCode.RightArrow)) {
-			tr.Translate((Vector3.right)/20f);
-			if (!facingright){
-				Flip();
+			tr.Translate ((Vector3.right) / 20f);
+			if (!facingright) {
+				Flip ();
 			}
 		}
 
 		
-		if (AltarInRange) {
-			GameObject[] ImpList = GameObject.FindGameObjectsWithTag("Imp");
-			if(ImpList.Length<ImpAllow){
-				if(Input.GetKeyDown (KeyCode.X)){
-					Instantiate (Imp,new Vector2 (tr.position.x, tr.position.y), Quaternion.identity);
+		if (ImpAltarInRange) {
+			GameObject[] ImpList = GameObject.FindGameObjectsWithTag ("Imp");
+			if (ImpList.Length < ImpAllow) {
+				if (Input.GetKeyDown (KeyCode.X)) {
+					Instantiate (Imp, new Vector2 (tr.position.x, tr.position.y), Quaternion.identity);
+				}
+			}
+		}
+
+		if (SuccAltarInRange) {
+			GameObject[] SuccList = GameObject.FindGameObjectsWithTag ("Succubus");
+			if (SuccList.Length < SuccAllow) {
+				if (Input.GetKeyDown (KeyCode.X)) {
+					Instantiate (Succubus, new Vector2 (tr.position.x, tr.position.y), Quaternion.identity);
 				}
 			}
 		}
@@ -131,19 +145,40 @@ public class Move : MonoBehaviour {
 	
 	void OnTriggerEnter2D(Collider2D coll){
 		if (coll.gameObject.tag == "AltarRange") {
-			AltarInRange = true;
+			string AltarType = coll.gameObject.GetComponent<AltarRangeScript>().AltarType;
+			if(AltarType == "IAltar"){
+				ImpAltarInRange = true;
+			}
+
+			if(AltarType == "SAltar"){
+				SuccAltarInRange = true;
+				}
+			}
 		}
-	}
 	
 	void OnTriggerStay2D(Collider2D coll){
 		if (coll.gameObject.tag == "AltarRange") {
-			AltarInRange = true;
+			string AltarType = coll.gameObject.GetComponent<AltarRangeScript>().AltarType;
+			if(AltarType == "IAltar"){
+				ImpAltarInRange = true;
+			}
+			
+			if(AltarType == "SAltar"){
+				SuccAltarInRange = true;
+			}
 		}
 	}
 	
 	void OnTriggerExit2D(Collider2D coll){
 		if (coll.gameObject.tag == "AltarRange") {
-			AltarInRange = false;
+			string AltarType = coll.gameObject.GetComponent<AltarRangeScript>().AltarType;
+			if(AltarType == "IAltar"){
+				ImpAltarInRange = false;
+			}
+			
+			if(AltarType == "SAltar"){
+				SuccAltarInRange = false;
+			}
 		}
 	}
 
