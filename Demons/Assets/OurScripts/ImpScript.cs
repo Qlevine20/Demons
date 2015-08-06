@@ -2,13 +2,13 @@
 using System.Collections;
 using System;
 
-public class ImpScript : MonoBehaviour {
+public class impScript : MonoBehaviour {
 
 
 	public int health;
 	public int movespeed;
 	private Transform imptr;
-	private bool SuccFacingright;
+	private bool ImpFacingright;
 	public GameObject ImpSpike;
 	private float count;
 	public int TimeToDie;
@@ -16,8 +16,8 @@ public class ImpScript : MonoBehaviour {
 	void Awake () {
 		count = 0;
 		imptr = this.transform;
-		SuccFacingright = (Move.facingright) ? true : false;
-		if (SuccFacingright) {
+		ImpFacingright = (Move.facingright) ? true : false;
+		if (ImpFacingright) {
 			Flip ();
 		}
 	}
@@ -32,7 +32,7 @@ public class ImpScript : MonoBehaviour {
 			Destroy (this.gameObject);
 		}
 
-		if (SuccFacingright) {
+		if (ImpFacingright) {
 			imptr.Translate ((Vector3.right)*movespeed / 30f);
 		} else {
 			imptr.Translate ((Vector3.right)* -movespeed / 30f);
@@ -42,7 +42,7 @@ public class ImpScript : MonoBehaviour {
 	void OnTriggerEnter2D(Collider2D coll){
 		if (coll.gameObject.tag == "BlockSide"){
 			Flip ();
-			SuccFacingright = !SuccFacingright;
+			ImpFacingright = !ImpFacingright;
 		}
 
 

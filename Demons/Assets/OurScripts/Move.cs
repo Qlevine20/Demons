@@ -36,18 +36,18 @@ public class Move : MonoBehaviour {
 	private float AltarRangeScriptScale;
 
 
-	public GameObject Imp;
+	public GameObject imp;
 	public GameObject Succubus;
 
-	public int ImpAllow;
+	public int impAllow;
 	public int SuccAllow;
 
-	private bool ImpAltarInRange;
+	private bool impAltarInRange;
 	private bool SuccAltarInRange;
 	private bool grounded;
 	void Start(){
 		grounded = true;
-		ImpAltarInRange = false;
+		impAltarInRange = false;
 		SuccAltarInRange = false;
 		//Initialize each variable.
 
@@ -129,11 +129,11 @@ public class Move : MonoBehaviour {
 		}
 
 		
-		if (ImpAltarInRange) {
-			GameObject[] ImpList = GameObject.FindGameObjectsWithTag ("Imp");
-			if (ImpList.Length < ImpAllow) {
+		if (impAltarInRange) {
+			GameObject[] impList = GameObject.FindGameObjectsWithTag ("Imp");
+			if (impList.Length < impAllow) {
 				if (Input.GetKeyDown (KeyCode.X)) {
-					Instantiate (Imp, new Vector2 (tr.position.x, tr.position.y), Quaternion.identity);
+					Instantiate (imp, new Vector2 (tr.position.x, tr.position.y), Quaternion.identity);
 				}
 			}
 		}
@@ -155,7 +155,7 @@ public class Move : MonoBehaviour {
 		if (coll.gameObject.tag == "AltarRange") {
 			string AltarType = coll.gameObject.GetComponent<AltarRangeScript>().AltarType;
 			if(AltarType == "IAltar"){
-				ImpAltarInRange = true;
+				impAltarInRange = true;
 			}
 
 			if(AltarType == "SAltar"){
@@ -168,7 +168,7 @@ public class Move : MonoBehaviour {
 		if (coll.gameObject.tag == "AltarRange") {
 			string AltarType = coll.gameObject.GetComponent<AltarRangeScript>().AltarType;
 			if(AltarType == "IAltar"){
-				ImpAltarInRange = true;
+				impAltarInRange = true;
 			}
 			
 			if(AltarType == "SAltar"){
@@ -181,7 +181,7 @@ public class Move : MonoBehaviour {
 		if (coll.gameObject.tag == "AltarRange") {
 			string AltarType = coll.gameObject.GetComponent<AltarRangeScript>().AltarType;
 			if(AltarType == "IAltar"){
-				ImpAltarInRange = false;
+				impAltarInRange = false;
 			}
 			
 			if(AltarType == "SAltar"){
