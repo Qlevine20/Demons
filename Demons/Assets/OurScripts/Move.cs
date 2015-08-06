@@ -44,8 +44,9 @@ public class Move : MonoBehaviour {
 
 	private bool ImpAltarInRange;
 	private bool SuccAltarInRange;
+	private bool grounded;
 	void Start(){
-
+		grounded = true;
 		ImpAltarInRange = false;
 		SuccAltarInRange = false;
 		//Initialize each variable.
@@ -72,6 +73,12 @@ public class Move : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 
+
+		if (rb.velocity.y == 0) {
+			grounded = true;
+		} else {
+			grounded = false;
+		}
 		Physics2D.IgnoreLayerCollision (10, 9);
 
 
@@ -90,8 +97,9 @@ public class Move : MonoBehaviour {
 		}
 
 		//Up-Press
-		if (Input.GetKeyDown (KeyCode.UpArrow)) {
-			tr.Translate ((Vector3.up) / 15f);
+		if (Input.GetKeyDown (KeyCode.UpArrow) && grounded) {
+			grounded = false;
+			rb.AddForce (new Vector2(0,movespeed*20));
 			//Normal jump.  Without jetpack
 		} 
 
