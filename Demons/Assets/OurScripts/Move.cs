@@ -36,19 +36,23 @@ public class Move : MonoBehaviour {
 	private float AltarRangeScriptScale;
 
 
-	public GameObject imp;
+	public GameObject Imp;
 	public GameObject Succubus;
+	public GameObject Gluttony;
 
-	public int impAllow;
+	public int ImpAllow;
 	public int SuccAllow;
+	public int GluttAllow;
 
-	private bool impAltarInRange;
+	private bool ImpAltarInRange;
 	private bool SuccAltarInRange;
+	private bool GluttAltarInRange;
 	private bool grounded;
 	void Start(){
 		grounded = true;
-		impAltarInRange = false;
+		ImpAltarInRange = false;
 		SuccAltarInRange = false;
+		GluttAltarInRange = false;
 		//Initialize each variable.
 
 		AltarRangeScriptScale = 5;
@@ -72,8 +76,7 @@ public class Move : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-
-
+		
 		if (rb.velocity.y == 0) {
 			grounded = true;
 		} else {
@@ -129,11 +132,11 @@ public class Move : MonoBehaviour {
 		}
 
 		
-		if (impAltarInRange) {
-			GameObject[] impList = GameObject.FindGameObjectsWithTag ("Imp");
-			if (impList.Length < impAllow) {
+		if (ImpAltarInRange) {
+			GameObject[] ImpList = GameObject.FindGameObjectsWithTag ("Imp");
+			if (ImpList.Length < ImpAllow) {
 				if (Input.GetKeyDown (KeyCode.X)) {
-					Instantiate (imp, new Vector2 (tr.position.x, tr.position.y), Quaternion.identity);
+					Instantiate (Imp, new Vector2 (tr.position.x, tr.position.y), Quaternion.identity);
 				}
 			}
 		}
@@ -146,6 +149,15 @@ public class Move : MonoBehaviour {
 				}
 			}
 		}
+
+		if (GluttAltarInRange) {
+			GameObject[] GluttList = GameObject.FindGameObjectsWithTag ("Gluttony");
+			if (GluttList.Length < GluttAllow) {
+				if (Input.GetKeyDown (KeyCode.X)) {
+					Instantiate (Gluttony, new Vector2 (tr.position.x, tr.position.y), Quaternion.identity);
+				}
+			}
+		}
 	}
 
 
@@ -155,12 +167,16 @@ public class Move : MonoBehaviour {
 		if (coll.gameObject.tag == "AltarRange") {
 			string AltarType = coll.gameObject.GetComponent<AltarRangeScript>().AltarType;
 			if(AltarType == "IAltar"){
-				impAltarInRange = true;
+				ImpAltarInRange = true;
 			}
 
 			if(AltarType == "SAltar"){
 				SuccAltarInRange = true;
 				}
+
+			if(AltarType == "GAltar"){
+				GluttAltarInRange = true;
+			}
 			}
 		}
 	
@@ -168,7 +184,7 @@ public class Move : MonoBehaviour {
 		if (coll.gameObject.tag == "AltarRange") {
 			string AltarType = coll.gameObject.GetComponent<AltarRangeScript>().AltarType;
 			if(AltarType == "IAltar"){
-				impAltarInRange = true;
+				ImpAltarInRange = true;
 			}
 			
 			if(AltarType == "SAltar"){
@@ -181,7 +197,7 @@ public class Move : MonoBehaviour {
 		if (coll.gameObject.tag == "AltarRange") {
 			string AltarType = coll.gameObject.GetComponent<AltarRangeScript>().AltarType;
 			if(AltarType == "IAltar"){
-				impAltarInRange = false;
+				ImpAltarInRange = false;
 			}
 			
 			if(AltarType == "SAltar"){

@@ -2,12 +2,12 @@
 using System.Collections;
 using System;
 
-public class impScript : MonoBehaviour {
+public class ImpScript : MonoBehaviour {
 
 
 	public int health;
 	public int movespeed;
-	private Transform imptr;
+	private Transform Imptr;
 	private bool ImpFacingright;
 	public GameObject ImpSpike;
 	private float count;
@@ -15,7 +15,7 @@ public class impScript : MonoBehaviour {
 	// Use this for initialization
 	void Awake () {
 		count = 0;
-		imptr = this.transform;
+		Imptr = this.transform;
 		ImpFacingright = (Move.facingright) ? true : false;
 		if (ImpFacingright) {
 			Flip ();
@@ -33,9 +33,9 @@ public class impScript : MonoBehaviour {
 		}
 
 		if (ImpFacingright) {
-			imptr.Translate ((Vector3.right)*movespeed / 30f);
+			Imptr.Translate ((Vector3.right)*movespeed / 30f);
 		} else {
-			imptr.Translate ((Vector3.right)* -movespeed / 30f);
+			Imptr.Translate ((Vector3.right)* -movespeed / 30f);
 		}
 	}
 

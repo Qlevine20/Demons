@@ -3,7 +3,7 @@ using System.Collections;
 
 namespace Completed
 {
-	//The abstract keyword enables you to create classes and class members that are incomplete and must be implemented in a derived class.
+	//The abstract keyword enables you to create classes and class members that are incomplete and must be Implemented in a derived class.
 	public abstract class MovingObject : MonoBehaviour
 	{
 		public float moveTime = 0.1f;			//Time it will take object to move, in seconds.
@@ -115,7 +115,7 @@ namespace Completed
 		}
 		
 		
-		//The abstract modifier indicates that the thing being modified has a missing or incomplete implementation.
+		//The abstract modifier indicates that the thing being modified has a missing or incomplete Implementation.
 		//OnCantMove will be overriden by functions in the inheriting classes.
 		protected abstract void OnCantMove <T> (T component)
 			where T : Component;
